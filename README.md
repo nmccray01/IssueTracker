@@ -1,2 +1,2 @@
 # NewApp
-New Java-Portfolio-App
+New IssueTracker-App
