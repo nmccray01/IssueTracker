@@ -9,9 +9,6 @@ import java.util.Optional;
 @Repository
 public interface IssueRepository extends JpaRepository<Issue, Long> {
 
-        @Query("SELECT i from Issue i WHERE i.assigneeId = ?1")
-        Optional<Issue> findIssueByAssignee(Long assigneeId);
-
         @Query("SELECT i from Issue i WHERE i.title = ?1")
         Optional<Issue> findIssueByTitle(String title);
 

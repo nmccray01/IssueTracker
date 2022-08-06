@@ -2,6 +2,7 @@ package com.nmccray.issuetracker.appuser;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.nmccray.issuetracker.issue.Issue;
 import com.nmccray.issuetracker.project.Project;
 
 import javax.persistence.*;
@@ -34,13 +35,30 @@ public class AppUser {
     private Set<Project> projects = new LinkedHashSet<>();
 
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Issue> createdIssues = new LinkedHashSet<>();
+
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Issue> assignedIssues = new LinkedHashSet<>();
+
+
     public AppUser(){}
 
     public AppUser(String name, String password){
         this.name = name;
         this.password = password;
         this.registered = LocalDate.now();
-        //this.projects = new LinkedHashSet<>();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,6 +91,30 @@ public class AppUser {
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public Set<Issue> getCreatedIssues() {
+        return createdIssues;
+    }
+
+    public void setCreatedIssues(Set<Issue> createdIssues) {
+        this.createdIssues = createdIssues;
+    }
+
+    public Set<Issue> getAssignedIssues() {
+        return assignedIssues;
+    }
+
+    public void setAssignedIssues(Set<Issue> assignedIssues) {
+        this.assignedIssues = assignedIssues;
+    }
+
+    public void addCreatedIssues(Issue issue){
+        this.createdIssues.add(issue);
+    }
+
+    public void addAssignedIssues(Issue issue){
+        this.assignedIssues.add(issue);
     }
 
     @Override

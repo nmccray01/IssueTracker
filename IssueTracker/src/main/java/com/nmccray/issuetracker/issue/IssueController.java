@@ -36,9 +36,16 @@ public class IssueController {
     public void updateIssue(
             @PathVariable("issueId") Long issueId,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) Long assigneeId,
             @RequestParam(required = false) String status) {
-        issueService.updateIssue(issueId, description, assigneeId, status);
+        issueService.updateIssue(issueId, description, status);
+    }
+
+    @PutMapping(path="{issueId}/assignee/{assigneeId}")
+    public void assignIssue(
+            @PathVariable("issueId") Long issueId,
+            @PathVariable("assigneeId") Long assigneeId
+    ){
+        issueService.assignIssueToUser(issueId, assigneeId);
     }
 
 }

@@ -15,11 +15,13 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final AppUserRepository appUserRepository;
+    private final IssueRepository issueRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, AppUserRepository appUserRepository) {
+    public ProjectService(ProjectRepository projectRepository, AppUserRepository appUserRepository, IssueRepository issueRepository) {
         this.projectRepository = projectRepository;
         this.appUserRepository = appUserRepository;
+        this.issueRepository = issueRepository;
     }
 
     public List<Project> getProjects(){
@@ -70,6 +72,24 @@ public class ProjectService {
         );
 
         project.addMember(user);
+    }
+
+    @Transactional
+    public void addIssueToProject(Long projectId, Long issueId){
+        Project project = projectRepository.findById(projectId).orElseThrow(()->
+                new IllegalStateException(
+                        "Project doesnt exist!"
+                )
+        );
+
+        Issue issue = issueRepository.findById(issueId).orElseThrow(()->
+                new IllegalStateException(
+                        "Issue doesnt exist!"
+                )
+        );
+
+        project.addIssue(issue);
+        issue.setProject(project);
     }
 
 }

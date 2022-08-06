@@ -1,6 +1,9 @@
 package com.nmccray.issuetracker.issue;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nmccray.issuetracker.appuser.AppUser;
+import com.nmccray.issuetracker.project.Project;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,44 +25,47 @@ public class Issue {
     )
     private Long id;
     private String type;
-    private Long reporterId;
     private String title;
     private String description;
     private LocalDateTime creationDate;
     private String status;
     private LocalDate deadlineDate;
-    private Long assigneeId;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private AppUser creator;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "assignee_id")
+    private AppUser assignee;
 
     public Issue(){
     }
 
-    public Issue (String type, Long reporterId, String title, String description,
-                  LocalDateTime creationDate, String status, LocalDate deadlineDate, Long assigneeId, Long issueId){
-        this.id = issueId;
+    public Issue (AppUser creator, String type, String title, String description,
+                  LocalDateTime creationDate, String status, LocalDate deadlineDate){
+        this.creator = creator;
         this.type = type;
-        this.reporterId = reporterId;
         this.title = title;
         this.description = description;
         this.creationDate = creationDate;
         this.status = status;
         this.deadlineDate = deadlineDate;
-        this.assigneeId = assigneeId;
     }
 
-    public Issue (String type, Long reporterId, String title, String description,
-                  LocalDateTime creationDate, String status, LocalDate deadlineDate, Long assigneeId){
-        this.type = type;
-        this.reporterId = reporterId;
-        this.title = title;
-        this.description = description;
-        this.creationDate = creationDate;
-        this.status = status;
-        this.deadlineDate = deadlineDate;
-        this.assigneeId = assigneeId;
-    }
-
-    public void setIssueId(Long issueId) {
+    public void setId(Long issueId) {
         this.id = issueId;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getType() {
@@ -68,14 +74,6 @@ public class Issue {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public long getReporterId() {
-        return reporterId;
-    }
-
-    public void setReporterId(Long reporterId) {
-        this.reporterId = reporterId;
     }
 
     public String getTitle() {
@@ -118,12 +116,40 @@ public class Issue {
         this.deadlineDate = deadlineDate;
     }
 
-    public Long getAssignee() {
-        return assigneeId;
+    public AppUser getCreator() {
+        return creator;
     }
 
-    public void setAssignee(Long assigneeId) {
-        this.assigneeId = assigneeId;
+    public void setCreator(AppUser creator) {
+        this.creator = creator;
+    }
+
+    public AppUser getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(AppUser assignee) {
+        this.assignee = assignee;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Issue )) return false;
+        return id != null && id.equals(((Issue) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 
     @Override
@@ -131,7 +157,6 @@ public class Issue {
         return "Issue{" +
                 "issueId=" + id +
                 ", type='" + type + '\'' +
-                ", reporterId=" + reporterId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", creationDate=" + creationDate +

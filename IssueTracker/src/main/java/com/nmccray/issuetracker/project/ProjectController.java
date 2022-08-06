@@ -55,4 +55,12 @@ public class ProjectController {
         projectService.addUserToProject(projectId, userId);
     }
 
+    @PutMapping("{projectId}/issues/{issueId}")
+    public void addIssueToProject(
+            @PathVariable("projectId") Long projectId,
+            @PathVariable("issueId") Long issueId
+    ){
+        projectService.addIssueToProject(projectId, issueId);
+    }
+
 }
