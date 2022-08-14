@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+import static com.nmccray.issuetracker.appuser.AppUserRole.ADMIN;
+import static com.nmccray.issuetracker.appuser.AppUserRole.USER;
+
 @Configuration
 public class AppUserConfig {
 
@@ -13,12 +16,16 @@ public class AppUserConfig {
     CommandLineRunner UserCommandLineRunner(AppUserRepository repository){
         return args -> {
             AppUser appUser1 = new AppUser(
-                    "Tom",
-                    "12345"
+                    "Admin",
+                    "admin@admin.de",
+                    "12345",
+                    ADMIN
             );
             AppUser appUser2 = new AppUser(
                     "Andrea",
-                    "12345"
+                    "andrea@email.de",
+                    "12345",
+                    USER
             );
             System.out.println(appUser1);
             System.out.println(appUser2);

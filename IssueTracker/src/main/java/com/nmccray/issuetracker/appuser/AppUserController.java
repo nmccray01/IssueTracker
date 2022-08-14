@@ -36,7 +36,9 @@ public class AppUserController {
     public void updateUser(
             @PathVariable("userId") Long userId,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String password) {
-        appUserService.updateUser(userId, name, password);
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String password,
+            @RequestParam(required = false) AppUserRole role) {
+        appUserService.updateUser(userId, name, email, password, role);
     }
 }

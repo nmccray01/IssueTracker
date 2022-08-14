@@ -4,16 +4,19 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nmccray.issuetracker.issue.Issue;
 import com.nmccray.issuetracker.project.Project;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+
 
 @Entity
 @Table
-public class AppUser {
+public class AppUser implements UserDetails{
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -26,9 +29,13 @@ public class AppUser {
     )
     private Long id;
     @Column(unique = true)
-    private String name;
+    private String username;
+    private String email;
     private String password;
     private LocalDate registered;
+    private AppUserRole role;
+    private Boolean locked;
+    private Boolean enabled;
 
     @ManyToMany(mappedBy = "members")
     @JsonManagedReference
@@ -47,10 +54,50 @@ public class AppUser {
 
     public AppUser(){}
 
-    public AppUser(String name, String password){
-        this.name = name;
+    public AppUser(String name, String email, String password, AppUserRole role){
+        this.username = name;
+        this.email = email;
         this.password = password;
         this.registered = LocalDate.now();
+        this.role = role;
+        this.locked = false;
+        this.enabled = true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.role.name());
+        return Collections.singletonList(authority);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     public Long getId() {
@@ -61,12 +108,8 @@ public class AppUser {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public LocalDate getRegistered() {
@@ -77,12 +120,24 @@ public class AppUser {
         this.registered = registered;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public AppUserRole getRole() {
+        return role;
+    }
+
+    public void setRole(AppUserRole role) {
+        this.role = role;
     }
 
     public Set<Project> getProjects() {
@@ -121,7 +176,7 @@ public class AppUser {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", registered=" + registered +
                 '}';
