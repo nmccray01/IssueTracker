@@ -13,25 +13,27 @@ import static com.nmccray.issuetracker.appuser.AppUserRole.USER;
 public class AppUserConfig {
 
     @Bean
-    CommandLineRunner UserCommandLineRunner(AppUserRepository repository){
+    CommandLineRunner UserCommandLineRunner(AppUserRepository repository, AppUserService service){
         return args -> {
-            AppUser appUser1 = new AppUser(
-                    "Admin",
-                    "admin@admin.de",
+            AppUser DummyUser1 = new AppUser(
+                    "Tom",
+                    "Tom@email.de",
                     "12345",
-                    ADMIN
+                    USER
             );
-            AppUser appUser2 = new AppUser(
+            AppUser DummyUser2 = new AppUser(
                     "Andrea",
                     "andrea@email.de",
                     "12345",
                     USER
             );
-            System.out.println(appUser1);
-            System.out.println(appUser2);
+            System.out.println(DummyUser1);
+            System.out.println(DummyUser2);
            repository.saveAll(
-                    List.of(appUser1, appUser2)
+                    List.of(DummyUser1, DummyUser2)
            );
+
+           service.signUpUser(new AppUser("Admin", "admin@admin.de", "admin123", ADMIN));
         };
     }
 }

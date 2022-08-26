@@ -54,8 +54,8 @@ public class AppUser implements UserDetails{
 
     public AppUser(){}
 
-    public AppUser(String name, String email, String password, AppUserRole role){
-        this.username = name;
+    public AppUser(String username, String email, String password, AppUserRole role){
+        this.username = username;
         this.email = email;
         this.password = password;
         this.registered = LocalDate.now();

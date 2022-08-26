@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,10 +14,12 @@ import java.util.List;
 public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AppUserService(AppUserRepository appUserRepository){
+    public AppUserService(AppUserRepository appUserRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.appUserRepository = appUserRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public List<AppUser> getUsers(){
@@ -43,7 +46,24 @@ public class AppUserService implements UserDetailsService {
             throw new IllegalStateException("Email already taken!");
         }
 
-        //Else encode password and save user
+        String encodedPassword = bCryptPasswordEncoder
+                .encode(appUser.getPassword());
+
+        appUser.setPassword(encodedPassword);
+
+        appUserRepository.save(appUser);
+
+    }
+
+    public AppUser loginUser(String email, String password){
+
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        try {
+            AppUser user = appUserRepository.findUserByCredentials(email, encodedPassword).get();
+            return user;
+        } catch(Exception e){
+            throw new IllegalStateException("Wrong credentials!");
+        }
     }
 
     @Override

@@ -2,11 +2,17 @@ package com.nmccray.issuetracker.security.config;
 
 import com.nmccray.issuetracker.appuser.AppUserService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -31,11 +37,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-
-    //authManagerBuild
-    //@Bean
-    //public InMemoryUserDetailsManager userDetailsService() {}
-
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider =
@@ -44,6 +45,5 @@ public class WebSecurityConfig {
         provider.setUserDetailsService(appUserService);
         return provider;
     }
-
 
 }
