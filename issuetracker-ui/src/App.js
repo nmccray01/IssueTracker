@@ -1,11 +1,18 @@
 import './App.css';
-import LoginPage from "./pages/AuthorizationPage/Login";
+import Frontpage from "./pages/Frontpage/Frontpage";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import MenuPage from "./pages/MenuPage/MenuPage";
 
 function App() {
   return (
-    <div className="App">
-      <LoginPage/>
-    </div>
+      <Router>
+          <div className="App" >
+            <Routes>
+                <Route path={"/"} element={<Frontpage/>}/>
+                <Route path={"/menu"} element={<MenuPage/>}/>
+            </Routes>
+          </div>
+      </Router>
   );
 }
 
