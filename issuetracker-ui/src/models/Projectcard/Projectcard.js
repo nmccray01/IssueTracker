@@ -1,23 +1,21 @@
 import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 
-
-function Projectcard(){
+//<Card sx={{ minWidth: 275, maxWidth: 445}}>
+function Projectcard(props){
     return(
         <div>
-            <Card sx={{ minWidth: 275, maxWidth: 445 }}>
+            <Card>
                 <CardActionArea>
-                <CardContent onClick={()=>{}}>
-                    <Typography variant="h5" component="div">
-                        Projectname
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        Projectdescription
-                    </Typography>
-
-                </CardContent>
+                    <CardContent onClick={()=>{}}>
+                        <Typography variant="h5" component="div">
+                            {props.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            {props.description}
+                        </Typography>
+                    </CardContent>
                 </CardActionArea>
             </Card>
-
         </div>
     )
 }

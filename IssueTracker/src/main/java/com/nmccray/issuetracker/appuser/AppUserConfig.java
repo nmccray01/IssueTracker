@@ -16,10 +16,10 @@ public class AppUserConfig {
     CommandLineRunner UserCommandLineRunner(AppUserRepository repository, AppUserService service){
         return args -> {
             AppUser DummyUser1 = new AppUser(
-                    "Tom",
-                    "Tom@email.de",
+                    "Admin0",
+                    "admin@email.de",
                     "12345",
-                    USER
+                    ADMIN
             );
             AppUser DummyUser2 = new AppUser(
                     "Andrea",

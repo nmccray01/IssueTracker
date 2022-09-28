@@ -1,5 +1,5 @@
 import DefaultNavbar from "../../models/Navbar/DefaultNavbar";
-import Projectcard from "../../models/Projectcard/Projectcard";
+import ProjectcardGrid from "../../models/Projectcard/ProjectcardGrid";
 
 function MenuPage(){
 
@@ -7,7 +7,7 @@ function MenuPage(){
         <div>
             <DefaultNavbar/>
             <h1>This is the menu</h1>
-            <Projectcard/>
+            <ProjectcardGrid/>
         </div>
     )
 

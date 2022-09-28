@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping(path = "api/v1/issue")
 public class IssueController {
